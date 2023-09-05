@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+       "target": "es2016",
+       "module": "commonjs",
+       "outDir": "./build",
+       "emitDecoratorMetadata": true,
+       "experimentalDecorators": true,
+       "sourceMap": true,
+       "strict": true,
+       "skipLibCheck": true,
+       "removeComments": true,
+       "noUnusedLocals": true,
+       "esModuleInterop": true,
+       "strictPropertyInitialization": false
+    }
+ }
