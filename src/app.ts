@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /* Configurar las rutas */
 
 app.get('/', (_, res: Response) => {
-    res.status(200).send('hola ');
+    res.status(200).send('hola desde valtx ');
 });
 
 app.listen(port, () => {
