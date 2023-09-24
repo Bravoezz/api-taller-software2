@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /* Configurar las rutas */
 
 app.get('/', (_, res: Response) => {
+    console.log('hola rama dev')
     res.status(200).send('hola desde valtx ');
 });
 
