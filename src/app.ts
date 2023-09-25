@@ -1,30 +1,13 @@
-import express, { Response } from 'express';
-import morgan from 'morgan';
-import cors from 'cors';
-import bodyParser from 'body-parser';
+import { envs } from './config';
+import { AppRoutes } from './presentation/routes';
+import { Server } from './presentation/server';
 
-const app = express();
+async function main() {
+    // iniciar el server
+    new Server({
+        routes: AppRoutes.routes,
+        port: Number(envs.PORT),
+    }).start();
+}
 
-const port = process.env.PORT || 3000;
-
-// loguar peticiones
-app.use(morgan('dev'));
-
-// configurar los cors
-app.use(cors());
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-/* Configurar las rutas */
-
-app.get('/', (_, res: Response) => {
-    console.log('hola rama dev')
-    res.status(200).send('hola desde valtx ');
-});
-
-app.listen(port, () => {
-    console.log('server ready in ' + port);
-});
-
-export default app;
+main();
