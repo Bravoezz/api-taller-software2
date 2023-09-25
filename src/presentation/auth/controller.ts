@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AuthRepository, RegisterUserDto } from '../../domain';
 import { JwtAdapter } from '../../config';
+import { user } from '../../data';
 
 export class AuthController {
     constructor(
@@ -15,7 +16,7 @@ export class AuthController {
             .then(async user => {
                 res.status(200).json({
                     user,
-                    token: await JwtAdapter.generateToken({email:user.email})
+                    token: await JwtAdapter.generateToken({email:user.email,id:user.id})
                 })
             })
             .catch( error => {
@@ -26,5 +27,17 @@ export class AuthController {
 
     loginUser = (req: Request, res: Response) => {
         res.json('Login');
+    }
+
+    getUsers = (req: Request, res: Response) => {
+        user.findMany()
+            .then(resp => res.json({
+                users: resp,
+                token: req.body.payload
+            }))
+            .catch(error => {
+                console.log(error)
+                return res.status(402).json(error)
+            })
     }
 }
