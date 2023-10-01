@@ -15,7 +15,6 @@ export class AuthRoutes {
 
         const controller = new AuthController(authRepository);
 
-
         // define auth routes
         router.post('/register', controller.registerUser);
         router.post('/login', controller.loginUser);

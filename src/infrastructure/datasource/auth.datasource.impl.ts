@@ -2,6 +2,7 @@ import { user } from '../../data';
 import {
     AuthDatasource,
     CustomError,
+    LoginUserDTO,
     RegisterUserDto,
     UserEntity,
 } from '../../domain';
@@ -16,15 +17,37 @@ export class AuthDatasourceImpl implements AuthDatasource {
         private readonly comparePassword:CompareFunction,
     ){}
 
-    login(): string {
-        throw new Error('Method not implemented.');
+    async login(loginUserDto: LoginUserDTO): Promise<UserEntity> {
+        const {email,password} = loginUserDto
+        try {
+            const findUser = await user.findFirst({where:{email}})
+            if(!findUser) throw CustomError.customError(402,'User not found');
+
+            const validPassword = this.comparePassword(password,findUser.password);
+            if(!validPassword) throw CustomError.customError(402,'User not valid');
+
+            return new UserEntity(
+                findUser.id,
+                findUser.name,
+                findUser.email,
+                findUser.password,
+                findUser.role,
+                findUser.img || ''
+            )            
+        } catch (error) {
+            console.log(error);
+            if (error instanceof CustomError) {
+                throw error;
+            }
+            throw CustomError.customError(500, 'Internal server error');
+        }
     }
 
     async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
         try {
             const findDuplicateEmail = await user.findFirst({where: { email: registerUserDto.email }});
 
-            if (findDuplicateEmail) throw CustomError.customError(402, 'Email Duplicate');
+            if (findDuplicateEmail) throw CustomError.customError(402, 'Error invalid email');
 
             //** hashear la contraceña del usuario
             registerUserDto.password = this.hashPassword(registerUserDto.password)

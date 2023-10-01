@@ -23,7 +23,7 @@ export class AuthMiddleware {
             const payload = await JwtAdapter.validateToken<PayloadJwtVerify>(token);
             if (!payload)
                 return res.status(401).json({ error: 'Invalid token' });
-
+            // console.log(payload)
             const findUser = await user.findUnique({where:{id:payload.id}})
 
             if(!findUser)
